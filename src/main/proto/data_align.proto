@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package example;
+
+service DataAlign {
+  rpc getData(StringValue) returns (CsvFile);
+}
+
+message CsvFile {
+  string name = 1;
+  bytes data = 2;
+}
+
+message StringValue {
+  string value = 1;
+}
