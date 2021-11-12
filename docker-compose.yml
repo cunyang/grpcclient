@@ -1,0 +1,8 @@
+version: "3"
+services:
+  align:
+    image: transwarp/align
+    container_name: align
+    network_mode: host
+    devices:
+      - /dev/sgx_enclave

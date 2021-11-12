@@ -1,0 +1,41 @@
+# Java manifest example
+loader.pal_internal_mem_size = "512M"
+
+# Host-level directory (/usr) required by the Java executable
+fs.mount.usr.type = "chroot"
+fs.mount.usr.path = "/usr/java/jdk1.8.0_211"
+fs.mount.usr.uri = "file:/usr/java/jdk1.8.0_211"
+
+# root directory
+fs.mount.root.type = "chroot"
+fs.mount.root.path = "/root"
+fs.mount.root.uri = "file:/root"
+
+# temp directory
+fs.mount.tmp.type = "chroot"
+fs.mount.tmp.path = "/tmp"
+fs.mount.tmp.uri = "file:/tmp"
+
+# SGX general options
+
+# If using 64G or greater enclave sizes, the JVM flag `-Xmx4G` can be omitted in graphene-sgx.
+sgx.enclave_size = "8G"
+
+# SGX needs minimum 32 threads for loading a JVM.
+sgx.thread_num = 512
+
+# SGX trusted libraries
+
+# SGX allowed libraries(not seekable files)
+sgx.allowed_files = [
+  "file:/usr/java/jdk1.8.0_211/bin/java",
+  "file:/lib/x86_64-linux-gnu/",
+  "file:/usr/lib/x86_64-linux-gnu/",
+  "file:/usr/java/jdk1.8.0_211/lib",
+  "file:/usr/java/jdk1.8.0_211/jre/lib",
+  "file:/usr/lib/fl",
+  "file:/etc/hosts",
+  "file:/etc/resolv.conf",
+  "file:/tmp",
+  "file:/root/app.jar"
+]
