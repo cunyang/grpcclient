@@ -24,6 +24,10 @@ sgx.enclave_size = "8G"
 # SGX needs minimum 32 threads for loading a JVM.
 sgx.thread_num = 512
 
+# SGX remote attestation
+sgx.remote_attestation = true
+sgx.ra_client_spid = ""
+
 # SGX trusted libraries
 
 # SGX allowed libraries(not seekable files)

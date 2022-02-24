@@ -1,9 +1,9 @@
-package com.example.clientdemo;
+package io.transwarp.security;
 
+import io.transwarp.security.graphene.GrapheneTrustManager;
 import example.DataAlignGrpc;
 import example.DataAlignOuterClass;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
+import io.grpc.*;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +14,8 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+
+import static io.transwarp.security.ClientDemoApplication.graphene;
 
 @RestController
 public class DataAlignController {
@@ -40,7 +42,17 @@ public class DataAlignController {
     }
 
     private List<String> getListFromGrpc(String address, String path) throws IOException {
+        String mrEnclave = System.getProperty("mrEnclave", null);
+        String mrSigner = System.getProperty("mrSigner", null);
+        String isvProdId = System.getProperty("isvProdId", null);
+        String isvSvn = System.getProperty("isvSvn", null);
+        if (!graphene.initClient(mrEnclave, mrSigner, isvProdId, isvSvn)) {
+            System.out.println("initClient fail");
+            //throw new RuntimeException("Client initialization failed.");
+        }
         List<String> result = new ArrayList<>();
+        ChannelCredentials channelCredentials = TlsChannelCredentials.newBuilder().trustManager(new GrapheneTrustManager()).build();
+//        ManagedChannel channel = Grpc.newChannelBuilderForAddress(address, 50051, channelCredentials).overrideAuthority("RATLS").build();
         ManagedChannel channel = ManagedChannelBuilder.forAddress(address, 50051).usePlaintext().build();
         DataAlignGrpc.DataAlignBlockingStub stub = DataAlignGrpc.newBlockingStub(channel);
         DataAlignOuterClass.StringValue filePath = DataAlignOuterClass.StringValue.newBuilder().setValue(path).build();

@@ -1,4 +1,4 @@
-package com.example.clientdemo;
+package io.transwarp.security;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
